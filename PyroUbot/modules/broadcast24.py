@@ -10,8 +10,18 @@ from pyrogram.enums import ChatMemberStatus, ChatType
 from pyrogram.errors import FloodWait
 from pytz import timezone
 
-from PyroUbot import *
-from PyroUbot.config import DEVS, OWNER_ID
+from PyroUbot import (
+    PY,
+    add_to_vars,
+    bot,
+    extract_user,
+    get_list_from_vars,
+    rem_expired_date,
+    remove_from_vars,
+    set_expired_date,
+    ubot,
+)
+from PyroUbot.config import BLACKLIST_CHAT, DEVS, OWNER_ID
 
 __MODULE__ = "broadcast24"
 __HELP__ = """
@@ -232,19 +242,31 @@ def _stop_task(user_id):
 
 
 async def _resume_all():
-    await asyncio.sleep(5)
-    for client in list(ubot._ubot):
-        try:
-            if _load(client.me.id).get("running"):
-                _start_task(client)
-        except Exception:
-            pass
+    try:
+        await asyncio.sleep(5)
+        for client in list(ubot._ubot):
+            try:
+                if _load(client.me.id).get("running"):
+                    _start_task(client)
+            except Exception:
+                pass
+    except Exception as error:
+        print(f"[broadcast24] resume error: {error}")
+
+
+def _resume_done(task):
+    if task.cancelled():
+        return
+    error = task.exception()
+    if error:
+        print(f"[broadcast24] resume failed: {error}")
 
 
 try:
-    asyncio.get_running_loop().create_task(_resume_all())
+    _resume_task = asyncio.get_running_loop().create_task(_resume_all())
+    _resume_task.add_done_callback(_resume_done)
 except RuntimeError:
-    pass
+    _resume_task = None
 
 
 @PY.UBOT("bc24")
