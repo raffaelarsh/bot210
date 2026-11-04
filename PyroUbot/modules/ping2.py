@@ -2,8 +2,6 @@ import os
 import json
 import asyncio
 import psutil
-# import speedtest
-from speedtest import Speedtest
 import random
 
 from datetime import datetime
