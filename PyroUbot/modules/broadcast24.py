@@ -85,6 +85,18 @@ def parse_delay(text):
     return value * {"s": 1, "m": 60, "h": 3600}[match.group(2)]
 
 
+def _preview(msg):
+    if msg is None:
+        return "(pesan sudah hilang dari Saved Messages)"
+    text = (msg.text or msg.caption or "").replace("\n", " ").strip()
+    if not text:
+        return "[media]" if msg.media else "(kosong)"
+    if len(text) > 60:
+        text = text[:60] + "..."
+    prefix = "[media] " if msg.media else ""
+    return prefix + text
+
+
 def _fmt_short(seconds):
     if seconds % 3600 == 0:
         return f"{seconds // 3600}h"
@@ -293,23 +305,38 @@ async def bc24_cmd(client, message):
         ids = data.get("messages", [])
         if not ids:
             return await message.reply("belum ada pesan broadcast24")
-        for mid in ids:
-            try:
-                await client.copy_message(message.chat.id, "me", mid)
-            except Exception:
-                pass
-        return
+        saved = await client.get_messages("me", ids)
+        lines = ["📋 DAFTAR BROADCAST24\n"]
+        for i, (mid, msg) in enumerate(zip(ids, saved), start=1):
+            lines.append(f"{i}. {_preview(msg)}")
+        lines.append("\nhapus satu: .bc24 del [nomor]\nhapus semua: .bc24 del")
+        return await message.reply("\n".join(lines))
 
     if sub == "del":
-        old = data.get("messages", [])
-        if old:
-            try:
-                await client.delete_messages("me", old)
-            except Exception:
-                pass
-        data["messages"] = []
+        ids = data.get("messages", [])
+        if len(message.command) < 3:
+            if ids:
+                try:
+                    await client.delete_messages("me", ids)
+                except Exception:
+                    pass
+            data["messages"] = []
+            _save(user_id, data)
+            return await message.reply("semua pesan broadcast24 dihapus")
+
+        if not message.command[2].isdigit():
+            return await message.reply("format: .bc24 del [nomor], contoh: .bc24 del 5")
+        number = int(message.command[2])
+        if not ids or number < 1 or number > len(ids):
+            return await message.reply(f"nomor tidak valid, tersedia 1 - {len(ids)}")
+        target = ids.pop(number - 1)
+        try:
+            await client.delete_messages("me", target)
+        except Exception:
+            pass
+        data["messages"] = ids
         _save(user_id, data)
-        return await message.reply("semua pesan broadcast24 dihapus")
+        return await message.reply(f"pesan nomor {number} dihapus, sisa {len(ids)} pesan")
 
     return await message.reply(
         "perintah: set, add, nyala, mati, delay, status, get, del, menu\n"
