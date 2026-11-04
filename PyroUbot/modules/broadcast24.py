@@ -55,7 +55,16 @@ def _load(user_id):
         with open(_path(user_id), "r", encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"running": False, "messages": [], "delay": DEFAULT_DELAY, "started_at": 0, "chats": 0}
+        return {
+            "running": False,
+            "messages": [],
+            "delay": DEFAULT_DELAY,
+            "started_at": 0,
+            "chats": 0,
+            "sukses": 0,
+            "gagal": 0,
+            "round": 0,
+        }
 
 
 def _save(user_id, data):
@@ -74,6 +83,14 @@ def parse_delay(text):
     if value < 1:
         return None
     return value * {"s": 1, "m": 60, "h": 3600}[match.group(2)]
+
+
+def _fmt_short(seconds):
+    if seconds % 3600 == 0:
+        return f"{seconds // 3600}h"
+    if seconds % 60 == 0:
+        return f"{seconds // 60}m"
+    return f"{seconds}s"
 
 
 def _fmt_seconds(seconds):
@@ -142,7 +159,12 @@ async def _run(client):
                 _save(user_id, data)
                 break
             if data.get("messages"):
-                await _send_round(client, chats, data["messages"])
+                done, failed = await _send_round(client, chats, data["messages"])
+                data = _load(user_id)
+                data["sukses"] = data.get("sukses", 0) + done
+                data["gagal"] = data.get("gagal", 0) + failed
+                data["round"] = data.get("round", 0) + 1
+                _save(user_id, data)
             await asyncio.sleep(data.get("delay", DEFAULT_DELAY))
     except asyncio.CancelledError:
         pass
@@ -234,6 +256,20 @@ async def bc24_cmd(client, message):
         data["delay"] = seconds
         _save(user_id, data)
         return await message.reply(f"jeda antar putaran diatur ke {_fmt_seconds(seconds)}")
+
+    if sub == "menu":
+        running = user_id in TASKS and not TASKS[user_id].done()
+        status = "🟢 AKTIF" if running else "🔴 MATI"
+        return await message.reply(
+            "📊 MENU BROADCAST24\n\n"
+            f"🟢 Status: {status}\n"
+            "🚀 Speed: normal\n"
+            f"⏱️ Delay Round: {_fmt_short(data.get('delay', DEFAULT_DELAY))}\n\n"
+            "📈 Statistik:\n"
+            f"• Sukses: {data.get('sukses', 0)}\n"
+            f"• Gagal: {data.get('gagal', 0)}\n"
+            f"• Round: {data.get('round', 0)}"
+        )
 
     if sub == "status":
         running = user_id in TASKS and not TASKS[user_id].done()
