@@ -95,7 +95,7 @@ async def _(client, message):
                                 pm_pic, caption=pm_msg.format(mention=rpk, warn=peringatan)
                             )
                         except ValueError:
-                            await set_vars(client.me.id, "PM_PIC", "https://telegra.ph//file/be22060c145c058bf4558.jpg")
+                            await set_vars(client.me.id, "PM_PIC", "https://i.pinimg.com/originals/a4/42/ef/a442efd3a057ba0ee4e8af6baa4e50e2.jpg")
                     else:
                         msg = await message.reply(
                             pm_msg.format(mention=rpk, warn=peringatan)
