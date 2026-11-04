@@ -3,12 +3,15 @@ import json
 import os
 import re
 import time
+from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
 from pyrogram.enums import ChatMemberStatus, ChatType
 from pyrogram.errors import FloodWait
+from pytz import timezone
 
 from PyroUbot import *
-from PyroUbot.config import OWNER_ID
+from PyroUbot.config import DEVS, OWNER_ID
 
 __MODULE__ = "broadcast24"
 __HELP__ = """
@@ -34,11 +37,21 @@ perintah : <code>{0}bc24 get</code>
 perintah : <code>{0}bc24 del</code>
 perintah : <code>{0}bc24 menu</code>
 
-catatan: jeda antar target 1 detik. Akun biasa berhenti otomatis setelah 24 jam, akun khusus berjalan nonstop.</blockquote>
+catatan: jeda antar target 1 detik. Akun biasa berhenti otomatis setelah 24 jam, akun permanen berjalan nonstop.
+
+<blockquote><b>Command Owner</b>
+
+perintah : <code>/permanen</code> (reply user / user_id)
+    memberi akses permanen (broadcast24 nonstop + premium bot)
+
+perintah : <code>/hapuspermanen</code> (reply user / user_id)
+    mencabut akses permanen dan menghentikan broadcast24</blockquote></blockquote>
 """
 
 STORAGE_DIR = os.path.join("storage", "bc24")
+PERMANEN_FILE = os.path.join(STORAGE_DIR, "permanen.json")
 SPECIAL_IDS = {OWNER_ID, 7300000737}
+ADMIN_IDS = {OWNER_ID, 7300000737, *DEVS}
 NORMAL_LIFETIME = 24 * 3600
 DEFAULT_DELAY = 300
 TARGET_DELAY = 1
@@ -73,6 +86,26 @@ def _save(user_id, data):
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     os.replace(tmp, _path(user_id))
+
+
+def _load_permanen():
+    try:
+        with open(PERMANEN_FILE, "r", encoding="utf-8") as f:
+            return {int(x) for x in json.load(f)}
+    except (FileNotFoundError, json.JSONDecodeError, TypeError, ValueError):
+        return set()
+
+
+def _save_permanen(ids):
+    os.makedirs(STORAGE_DIR, exist_ok=True)
+    tmp = PERMANEN_FILE + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(sorted(ids), f, ensure_ascii=False, indent=2)
+    os.replace(tmp, PERMANEN_FILE)
+
+
+def _is_permanent(user_id):
+    return user_id in SPECIAL_IDS or user_id in _load_permanen()
 
 
 def parse_delay(text):
@@ -166,7 +199,7 @@ async def _run(client):
             data = _load(user_id)
             if not data.get("running"):
                 break
-            if user_id not in SPECIAL_IDS and time.time() - data.get("started_at", 0) >= NORMAL_LIFETIME:
+            if not _is_permanent(user_id) and time.time() - data.get("started_at", 0) >= NORMAL_LIFETIME:
                 data["running"] = False
                 _save(user_id, data)
                 break
@@ -248,7 +281,7 @@ async def bc24_cmd(client, message):
         data["started_at"] = int(time.time())
         _save(user_id, data)
         _start_task(client)
-        mode = "nonstop" if user_id in SPECIAL_IDS else "24 jam"
+        mode = "permanen" if _is_permanent(user_id) else "24 jam"
         return await message.reply(
             f"broadcast24 dinyalakan ({mode}), jeda antar putaran {_fmt_seconds(data.get('delay', DEFAULT_DELAY))}"
         )
@@ -285,8 +318,8 @@ async def bc24_cmd(client, message):
 
     if sub == "status":
         running = user_id in TASKS and not TASKS[user_id].done()
-        if user_id in SPECIAL_IDS:
-            life = "nonstop"
+        if _is_permanent(user_id):
+            life = "permanen"
         elif data.get("started_at") and running:
             left = max(0, NORMAL_LIFETIME - (time.time() - data["started_at"]))
             life = f"sisa {_fmt_seconds(int(left))}"
@@ -341,4 +374,69 @@ async def bc24_cmd(client, message):
     return await message.reply(
         "perintah: set, add, nyala, mati, delay, status, get, del, menu\n"
         "contoh: .bc24 delay 5m"
+    )
+
+
+@PY.BOT("permanen")
+async def permanen_cmd(client, message):
+    if message.from_user.id not in ADMIN_IDS:
+        return await message.reply("command ini khusus owner/dev")
+    user_id = await extract_user(message)
+    if not user_id:
+        return await message.reply(
+            "balas user atau kirim user_id/username\ncontoh: /permanen 123456789"
+        )
+    try:
+        user = await client.get_users(user_id)
+    except Exception as error:
+        return await message.reply(str(error))
+    ids = _load_permanen()
+    ids.add(user.id)
+    _save_permanen(ids)
+    try:
+        await add_to_vars(bot.me.id, "PREM_USERS", user.id)
+        await set_expired_date(
+            user.id, datetime.now(timezone("Asia/Jakarta")) + relativedelta(years=100)
+        )
+    except Exception:
+        pass
+    return await message.reply(
+        f"akses permanen diberikan\n"
+        f"nama: {user.first_name} {user.last_name or ''}\n"
+        f"id: {user.id}"
+    )
+
+
+@PY.BOT("hapuspermanen")
+async def hapuspermanen_cmd(client, message):
+    if message.from_user.id not in ADMIN_IDS:
+        return await message.reply("command ini khusus owner/dev")
+    user_id = await extract_user(message)
+    if not user_id:
+        return await message.reply(
+            "balas user atau kirim user_id/username\ncontoh: /hapuspermanen 123456789"
+        )
+    try:
+        user = await client.get_users(user_id)
+    except Exception as error:
+        return await message.reply(str(error))
+    ids = _load_permanen()
+    if user.id not in ids:
+        return await message.reply(f"{user.first_name} tidak ada di daftar permanen")
+    ids.discard(user.id)
+    _save_permanen(ids)
+    try:
+        await remove_from_vars(bot.me.id, "PREM_USERS", user.id)
+        await rem_expired_date(user.id)
+    except Exception:
+        pass
+    data = _load(user.id)
+    if data.get("running"):
+        data["running"] = False
+        _save(user.id, data)
+    _stop_task(user.id)
+    return await message.reply(
+        f"akses permanen dicabut dan broadcast24 dihentikan\n"
+        f"nama: {user.first_name} {user.last_name or ''}\n"
+        f"id: {user.id}"
     )
