@@ -1,0 +1,23 @@
+# Secrets
+.env
+cookies.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+tes/
+
+# Bot runtime
+*.session
+*.session-journal
+proxy.txt
+
+# Backups
+*.bak
+
+# OS / editor
+.DS_Store
+Thumbs.db
