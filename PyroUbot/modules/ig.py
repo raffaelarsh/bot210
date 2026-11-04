@@ -185,7 +185,7 @@ async def instacrot(client: Client, message):
             tracemsg = traceback.format_exc()
             await message.reply_text(tracemsg)
             await message.reply_text(
-                "<blockquote>400: Sorry, Unable To Find It  try another or report it  to @vckys or support chat @Priaindiareal🤖</blockquote>"
+                "<blockquote>400: Sorry, Unable To Find It  try another or report it  to support chat🤖</blockquote>"
             )
         finally:
             await m.delete()

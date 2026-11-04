@@ -72,6 +72,6 @@ async def _(client, message):
     """
         await message.reply(_ping)
     else:
-        await message.reply(f"<blockquote>pong : {str(delta_ping_formatted).replace('.', ',')} ms</blockquote>\n\n<blockquote><b>USERBOT 10K/BULAN BY @noahubot_bot</b></blockquote>")
+        await message.reply(f"<blockquote>pong : {str(delta_ping_formatted).replace('.', ',')} ms</blockquote>")
 
 

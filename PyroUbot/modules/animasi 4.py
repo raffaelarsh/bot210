@@ -128,23 +128,23 @@ async def gahah(client: Client, message: Message):
     animation_ttl = range(0, 17)
     await message.edit("Ada Hadiah.....")
     animation_chars = [
-"⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬜⬜⬜⬜\n👇⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬜⬜⬜\n⬜👇⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬛⬜⬜\n⬜⬜👇⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬛⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜",
-            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜\n⬜⬜⬜⬜⬜",
-            "⬛⬛⬛⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜[🎁](https://t.me/moirestore1)⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
-            "⬛⬛⬛⬜⬜\n⬜⬜👇⬜⬜\n⬜⬜[🎁](https://t.me/moirestore1)⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
-            "⬛⬛⬜⬜⬜\n⬜👇⬜⬜⬜\n⬜[🎁](https://t.me/moirestore1)⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
-            "⬛⬜⬜⬜⬜\n👇⬜⬜⬜⬜\n[🎁](https://t.me/moirestore1)⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
+"⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬜⬜⬜⬜\n👇⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬜⬜⬜\n⬜👇⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬛⬜⬜\n⬜⬜👇⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬛⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜🎁⬜",
+            "⬛⬛⬛⬛⬜\n⬜⬜⬜⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜🎁⬜\n⬜⬜⬜⬜⬜",
+            "⬛⬛⬛⬛⬜\n⬜⬜⬜👇⬜\n⬜⬜⬜🎁⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
+            "⬛⬛⬛⬜⬜\n⬜⬜👇⬜⬜\n⬜⬜🎁⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
+            "⬛⬛⬜⬜⬜\n⬜👇⬜⬜⬜\n⬜🎁⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
+            "⬛⬜⬜⬜⬜\n👇⬜⬜⬜⬜\n🎁⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
             "⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜\n⬜⬜⬜⬜⬜",
             "⬜⬜⬜⬜\n⬜⬜⬜⬜\n⬜⬜⬜⬜\n⬜⬜⬜⬜",
             "⬜⬜⬜\n⬜⬜⬜\n⬜⬜⬜",
             "⬜⬜\n⬜⬜",
-            "[🎁](https://t.me/moirestore1)"
+            "🎁"
     ]
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)

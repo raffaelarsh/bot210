@@ -78,7 +78,7 @@ async def izzypalingganteng(client, message):
     typew = await message.edit("`Apa kau pantex, mau apa mau pc pc gw anying`")
 
 
-# Create by myself @Boysz
+
 
 
 @PY.UBOT("hah")

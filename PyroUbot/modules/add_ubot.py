@@ -312,7 +312,7 @@ async def _(client, callback_query):
 ɴᴀᴍᴇ : <a href=tg://user?id={new_client.me.id}>{new_client.me.first_name} {new_client.me.last_name or ''}</a>
 ɪᴅ : {new_client.me.id}
 ᴘʀᴇꜰɪxᴇꜱ : {' '.join(SH)}
-ʜᴀʀᴀᴘ ᴊᴏɪɴ : t.me/Testibylimsstzy ʜᴀʀᴀᴘ ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ ᴅɪᴀᴛᴀs ᴅᴀɴ ᴊᴀɴɢᴀɴ ᴏᴜᴛ ᴀɢᴀʀ sᴀғᴇᴛʏ
+ʜᴀʀᴀᴘ ᴊᴏɪɴ : t.me/roomsenna ʜᴀʀᴀᴘ ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ ᴅɪᴀᴛᴀs ᴅᴀɴ ᴊᴀɴɢᴀɴ ᴏᴜᴛ ᴀɢᴀʀ sᴀғᴇᴛʏ
 ᴊɪᴋᴀ ʙᴏᴛ ᴛɪᴅᴀᴋ ʀᴇꜱᴘᴏɴ, ᴋᴇᴛɪᴋ /restart</b></blockquote>
         """
     await bot_msg.edit(text_done, disable_web_page_preview=True,

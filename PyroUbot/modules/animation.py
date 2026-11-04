@@ -33,7 +33,7 @@ __HELP__ = """
 async def bulan(client, message):
     animation_interval = 0.2
     animation_ttl = range(96)
-    await message.edit("Boysz Ganteng..")
+    await message.edit("Senna Ganteng..")
     animation_chars = [
         "🌗",
         "🌘",

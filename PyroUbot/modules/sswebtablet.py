@@ -41,7 +41,7 @@ async def screenshot_handler(client, message):
     if not url.startswith(("http://", "https://")):
         url = "https://" + url
 
-    await message.reply_text("<b><i>PROSES SCREENSHOT PAKAI TABLET KINGZ ♛</i></b>")
+    await message.reply_text("<b><i>PROSES SCREENSHOT PAKAI TABLET SENNA ♛</i></b>")
 
     image_data = get_ssweb_image(url)
     if not image_data:
@@ -52,6 +52,6 @@ async def screenshot_handler(client, message):
     with open(filepath, "wb") as file:
         file.write(image_data)
 
-    await client.send_photo(message.chat.id, filepath, caption="**__Nih Kingz Gambarnya Sudah Di Screenshot Pakai Tablet.__**")
+    await client.send_photo(message.chat.id, filepath, caption="**__Nih Senna Gambarnya Sudah Di Screenshot Pakai Tablet.__**")
     os.remove(filepath)
     

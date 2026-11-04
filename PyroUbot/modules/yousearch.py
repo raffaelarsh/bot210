@@ -16,7 +16,7 @@ perintah : <code>{0}yousearch</code>
 
 @PY.UBOT("yousearch")
 @PY.TOP_CMD
-async def Boysz_gpt(client, message):
+async def Senna_gpt(client, message):
     try:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 

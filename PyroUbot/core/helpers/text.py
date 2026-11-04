@@ -18,7 +18,7 @@ class MSG:
 
 <b> 📚💎@{bot.me.username} ᴀᴅᴀʟᴀʜ ʙᴏᴛ ʏᴀɴɢ ᴅᴀᴘᴀᴛ ᴍᴇᴍʙᴜᴀᴛ ᴜsᴇʀʙᴏᴛ ᴅᴇɴɢᴀɴ ᴍᴜᴅᴀʜ</b>
 
-🚀ʙᴏᴛ ɪɴɪ ᴅɪᴋᴇᴍʙᴀɴɢᴋᴀɴ ᴏʟᴇʜ <a href=tg://openmessage?user_id={OWNER_ID}>@yogzzstr</a> ᴊɪᴋᴀ ᴀᴅᴀ ᴋᴇsᴀʟᴀʜᴀɴ ᴀᴛᴀᴜᴘᴜɴ ᴍᴀsᴀʟᴀʜ ᴅᴍ ᴏᴡɴᴇʀ ʙᴏᴛ 𝙳𝙸 𝙰𝚃𝙰𝚂 
+🚀ʙᴏᴛ ɪɴɪ ᴅɪᴋᴇᴍʙᴀɴɢᴋᴀɴ ᴏʟᴇʜ <a href=tg://openmessage?user_id={OWNER_ID}>@anyonima</a> ᴊɪᴋᴀ ᴀᴅᴀ ᴋᴇsᴀʟᴀʜᴀɴ ᴀᴛᴀᴜᴘᴜɴ ᴍᴀsᴀʟᴀʜ ᴅᴍ ᴏᴡɴᴇʀ ʙᴏᴛ 𝙳𝙸 𝙰𝚃𝙰𝚂 
 
 
 𝙲𝙰𝚁𝙰 𝚂𝙴𝚆𝙰 𝚄𝚂𝙴𝚁𝙱𝙾𝚃:
@@ -38,7 +38,7 @@ class MSG:
 <b>🔖 ᴛᴏᴛᴀʟ ʜᴀʀɢᴀ: ʀᴘ {total}.000</b>
 <b>🗓️ ᴛᴏᴛᴀʟ ʙᴜʟᴀɴ: {bulan}</b> 
 
-OWNER BOT : <a href=tg://openmessage?user_id={OWNER_ID}>@yogzzstr</a> 
+OWNER BOT : <a href=tg://openmessage?user_id={OWNER_ID}>@anyonima</a> 
 
 <b>🛍 ᴋʟɪᴋ ᴛᴏᴍʙᴏʟ ᴋᴏɴꜰɪʀᴍᴀsɪ ᴜɴᴛᴜᴋ ᴋɪʀɪᴍ ʙᴜᴋᴛɪ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴀɴᴅᴀ</b></blockquote>
 """
@@ -51,5 +51,5 @@ OWNER BOT : <a href=tg://openmessage?user_id={OWNER_ID}>@yogzzstr</a>
 """
 
     def POLICY():
-        return """ <blockquote><b>ᴊɪᴋᴀ ᴀᴅᴀ ᴋᴇɴᴅᴀʟᴀ sɪʟᴀʜᴋᴀɴ ʜᴜʙᴜɴɢɪ  <a href=tg://openmessage?user_id={OWNER_ID}>@yogzzstr</a></b></blockquote>
+        return """ <blockquote><b>ᴊɪᴋᴀ ᴀᴅᴀ ᴋᴇɴᴅᴀʟᴀ sɪʟᴀʜᴋᴀɴ ʜᴜʙᴜɴɢɪ  <a href=tg://openmessage?user_id={OWNER_ID}>@anyonima</a></b></blockquote>
 """

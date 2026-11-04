@@ -131,7 +131,7 @@ async def cekidte(client, message):
 │ ✨️ <b>Status Premium Nya:</b> { "Premium ✅" if getattr(target_user, 'is_premium', False) else "Tidak ❌"}
 │ 🆔️ <b>Chat ID:</b> <code>{message.chat.id}</code> ({chat_title})
 │ 🔗 <b>Link Profil:</b> <a href="tg://user?id={target_user.id}">Klik Nih</a>
-╰──「 <b>By @noahubot_bot</b> 」</blockquote>
+╰──「 <b>Senna</b> 」</blockquote>
 """
 
     if profile_card_path:

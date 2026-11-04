@@ -22,7 +22,6 @@ __HELP__ = """
 Total Methods: 5
 Time Limit: 300
 Only Owner!!!
-My Owner: @noahforme
 
 List Methods
 -floods

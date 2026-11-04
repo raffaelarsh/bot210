@@ -24,7 +24,7 @@ async def chat_gpt(client, message):
                 "<emoji id=5019523782004441717>❌</emoji>mohon gunakan format\ncontoh : .checkdana 085xxx"
             )
         else:
-            prs = await message.reply_text(f"<emoji id=6226405134004389590>🔍</emoji>proccesing Kingz....")
+            prs = await message.reply_text(f"<emoji id=6226405134004389590>🔍</emoji>proccesing Senna....")
             a = message.text.split(' ', 1)[1]
             response = requests.get(f'https://api.siputzx.my.id/api/check/dana?account_number={a}')
 

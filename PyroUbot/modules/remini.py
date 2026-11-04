@@ -39,10 +39,10 @@ __HELP__ = """
 @PY.TOP_CMD
 async def process_image(client, message):
     if not message.reply_to_message or not message.reply_to_message.photo:
-        await message.reply("<blockquote><b>Reply gambar yang mau di hd in dong Kingpria</b></blockquote>")
+        await message.reply("<blockquote><b>Reply gambar yang mau di hd in dong Senna</b></blockquote>")
         return
 
-    await message.reply("<blockquote><b>Proses Kingz...</b></blockquote>")
+    await message.reply("<blockquote><b>Proses Senna...</b></blockquote>")
 
     try:
         file_path = await message.reply_to_message.download()
@@ -56,10 +56,10 @@ async def process_image(client, message):
         await client.send_photo(
             chat_id=message.chat.id,
             photo=temp_output_path,
-            caption="<blockquote><b>SUDAH DI HD IN KINGZ</b></blockquote>",
+            caption="<blockquote><b>SUDAH DI HD IN SENNA</b></blockquote>",
             reply_to_message_id=message.id,
         )
 
         os.remove(temp_output_path)
     except Exception as e:
-        await message.reply(f"<blockquote><b>YAAH EROR NIH KINGPRIA:(</b></blockquote>{e}")
+        await message.reply(f"<blockquote><b>YAAH EROR NIH SENNA:(</b></blockquote>{e}")

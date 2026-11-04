@@ -1,4 +1,3 @@
-#rename by alwaysboysz(jangan di hapus anjeng)
 import asyncio
 import random
 
@@ -265,7 +264,7 @@ async def _(client, message):
         except Exception:
             pass
 
-    return await msg.edit(f"<blockquote><b>Pesan broadcast berhasil terkirim ke {done} user</blockquote></b>\n\n<blockquote><b>`USERBOT 10K/BULAN BY` @yogzdev</b></blockquote>")
+    return await msg.edit(f"<blockquote><b>Pesan broadcast berhasil terkirim ke {done} user</blockquote></b>\n\n<blockquote><b>`USERBOT 10K/BULAN BY` @anyonima</b></blockquote>")
 
 
 @PY.UBOT("addbl")

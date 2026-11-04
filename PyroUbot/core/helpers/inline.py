@@ -96,13 +96,13 @@ class BTN:
         
     def PROMODEK(message):
         button = [
-            [InlineKeyboardButton("「 ✅ Setuju & Lanjutkan 」", url="http://t.me/yogzzstr?text=Bang+Mau+Beli+Reseller+Ubot+Kirim+Qris+Atau+Dana")],
+            [InlineKeyboardButton("「 ✅ Setuju & Lanjutkan 」", url="https://t.me/anyonima?text=Bang+Mau+Beli+Reseller+Ubot+Kirim+Qris+Atau+Dana")],
         ]
         return button
 
-    def ALWAYSBOYSZ(message):
+    def ALWAYSSENNA(message):
         button = [
-            [InlineKeyboardButton("room public", url="https://t.me/aboutyogzzstr")],
+            [InlineKeyboardButton("room public", url="https://t.me/anyonima")],
         ]
         return button
 
@@ -150,7 +150,7 @@ class BTN:
             button = [
                 [InlineKeyboardButton("⦪ ʙᴇʟɪ ᴜꜱᴇʀʙᴏᴛ ⦫", callback_data="bahan")],
                 [
-                    InlineKeyboardButton("✭ ʀᴏᴏᴍ ᴘᴜʙʟɪᴄ ✭", url="https://t.me/aboutyogzzstr")
+                    InlineKeyboardButton("✭ ʀᴏᴏᴍ ᴘᴜʙʟɪᴄ ✭", url="https://t.me/anyonima")
                 ],
                 [
                     InlineKeyboardButton("⦪ ʙᴜᴀᴛ ᴜsᴇʀʙᴏᴛ ⳼", callback_data="buat_ubot"),

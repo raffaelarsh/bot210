@@ -16,7 +16,7 @@ perintah : <code>{0}joko</code>
 
 @PY.UBOT("joko")
 @PY.TOP_CMD
-async def Boysz_gpt(client, message):
+async def Senna_gpt(client, message):
     try:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
@@ -25,7 +25,7 @@ async def Boysz_gpt(client, message):
                 "<emoji id=5019523782004441717>❌</emoji>mohon gunakan format\ncontoh : .joko query"
             )
         else:
-            prs = await message.reply_text(f"<emoji id=5319230516929502602>🔍</emoji>proccesing kingz....")
+            prs = await message.reply_text(f"<emoji id=5319230516929502602>🔍</emoji>proccesing Senna....")
             a = message.text.split(' ', 1)[1]
             response = requests.get(f'https://api.siputzx.my.id/api/ai/joko?content={a}')
 
@@ -43,7 +43,7 @@ async def Boysz_gpt(client, message):
         await message.reply_text(f"{e}")
 
 @PY.BOT("joko")
-async def Boysz_gpt(client, message):
+async def Senna_gpt(client, message):
     try:
         await client.send_chat_action(message.chat.id, ChatAction.TYPING)
 
@@ -52,7 +52,7 @@ async def Boysz_gpt(client, message):
                 "<emoji id=5019523782004441717>❌</emoji>mohon gunakan format\ncontoh : .joko query"
             )
         else:
-            prs = await message.reply_text(f"<emoji id=5319230516929502602>🔍</emoji>proccesing kingz....")
+            prs = await message.reply_text(f"<emoji id=5319230516929502602>🔍</emoji>proccesing Senna....")
             a = message.text.split(' ', 1)[1]
             response = requests.get(f'https://api.siputzx.my.id/api/ai/joko?content={a}')
 

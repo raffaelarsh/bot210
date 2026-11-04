@@ -27,13 +27,13 @@ async def _(client, message):
         _id = await client.create_supergroup(group_name, desc)
         link = await client.get_chat(_id.id)
         await xd.edit(
-            f"berhaꜱil membuat telegram grup kingz: [{group_name}]({link.invite_link})",
+            f"berhaꜱil membuat telegram grup Senna: [{group_name}]({link.invite_link})",
             disable_web_page_preview=True,
         )
     elif group_type == "channel":
         _id = await client.create_channel(group_name, desc)
         link = await client.get_chat(_id.id)
         await xd.edit(
-            f"berhaꜱil membuat telegram channel kingz: [{group_name}]({link.invite_link})",
+            f"berhaꜱil membuat telegram channel Senna: [{group_name}]({link.invite_link})",
             disable_web_page_preview=True,
         )

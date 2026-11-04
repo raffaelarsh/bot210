@@ -10,7 +10,7 @@ __HELP__ = """
 <blockquote><b>Bantuan Untuk Dukun Ai
 
 perintah : <code>{0}dukunai</code>
-meramal dengan nama/peristiwa contoh <code>{0}dukunai</code> namaku boysz</b></blockquote>
+meramal dengan nama/peristiwa contoh <code>{0}dukunai</code> namaku Senna</b></blockquote>
 """
 
 @PY.UBOT("dukunai")
@@ -21,7 +21,7 @@ async def chat_gpt(client, message):
 
         if len(message.command) < 2:
             await message.reply_text(
-                "<emoji id=5019523782004441717>❌</emoji>mohon gunakan format\ncontoh : .dukunai namaku boysz"
+                "<emoji id=5019523782004441717>❌</emoji>mohon gunakan format\ncontoh : .dukunai namaku Senna"
             )
         else:
             prs = await message.reply_text(f"<emoji id=5192886773948107844>😮‍💨</emoji>Mbah Dukun Sedang Meramal....")

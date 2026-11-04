@@ -46,7 +46,7 @@ async def encrypt_js(client: Client, message: Message):
 
         await message.reply_document(
             encrypted_file_path,
-            caption="✅ **File berhasil dienkripsi!**\n🔒 @kingprem_bot"
+            caption="✅ **File berhasil dienkripsi!**"
         )
 
     except subprocess.CalledProcessError:

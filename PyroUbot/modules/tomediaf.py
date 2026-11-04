@@ -43,7 +43,7 @@ async def _(client, message):
             buffer = BytesIO(f.read())
             try:
                 media_url = await upload_file(buffer)
-                await message.reply(f"<b>berhasil diupload ke mediafire : <a href='{media_url}'>LINK NYA KINGZ</a></b>")
+                await message.reply(f"<b>berhasil diupload ke mediafire : <a href='{media_url}'>LINK NYA SENNA</a></b>")
             except Exception as e:
                 await message.reply(f"Error: {e}")
     else:

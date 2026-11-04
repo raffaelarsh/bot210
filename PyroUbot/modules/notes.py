@@ -33,7 +33,7 @@ for button:
 payment | dana - dana | | bank - bank # | 
 catatan : untuk membuat button menyamping adalah #
 
-contoh menggunakan callback/tombol : <a href='https://t.me/TESTIPRIBADIBOYSZ/1605'>tutorial</a></blockquote>
+</blockquote>
 """
 
 

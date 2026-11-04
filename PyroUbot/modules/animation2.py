@@ -52,7 +52,7 @@ async def pokonyaizzypalinggantengkaloinidiapusnantieror(client, message):
     await typew.edit("`Tapi Bo'ong`")
 
 
-# Create by myself @Boyszzzz
+
 
 
 @PY.UBOT("helicopter")

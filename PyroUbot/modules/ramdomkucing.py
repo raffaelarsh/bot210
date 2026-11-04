@@ -28,7 +28,7 @@ async def _(client, message):
         await message.reply(f"Query tidak valid. Gunakan salah satu dari: {valid_queries}.")
         return
 
-    processing_msg = await message.reply("Processing Kingz...")
+    processing_msg = await message.reply("Processing Senna...")
     
     try:
         await client.send_chat_action(message.chat.id, ChatAction.UPLOAD_PHOTO)

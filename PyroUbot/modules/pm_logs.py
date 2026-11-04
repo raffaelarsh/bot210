@@ -41,10 +41,6 @@ perintah : <code>{0}setpm</code>
 query: |pic |text |limit
     mengatur configuration pada pm_permit
 
-contoh menggunakan button  : <a href='https://t.me/Priaindiareal/1558'>tutorial</a>
-
-contoh menggunakan gambar yang benar  : <a href='https://t.me/Priaindiareal/1559'>tutorial</a>
-
 contoh menggunakan warning 
     command : setpm limit 5</blockquote>
 """

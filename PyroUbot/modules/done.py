@@ -73,8 +73,7 @@ async def done_command(client, message):
             f"<emoji id=5235457574958023592>💸</emoji> <b>ɴᴏᴍɪɴᴀʟ : {price}</b>\n"
             f"<emoji id=5267421370114914946>⏱</emoji> <b>ᴡᴀᴋᴛᴜ ᴘᴇᴍʙᴇʟɪᴀɴ : {time}</b>\n"
             f"<emoji id=5204242830687494041>🧾</emoji> <b>ᴘᴀʏᴍᴇɴᴛ : {payment}</b></blockquote>"
-            f" <blockquote><b> ᴛᴇʀɪᴍᴀᴋᴀsɪʜ ᴛᴇʟᴀʜ ᴏʀᴅᴇʀ ᴅɪ <a href=tg://openmessage?user_id={OWNER_ID}>𝙿𝚛𝚒𝚊𝚒𝚗𝚍𝚒𝚊 𝙲𝚘𝚛𝚙𝚘𝚛𝚊𝚝𝚒𝚘𝚗 ✮</a></blockquote"
-            f" <blockquote>ᴛᴇsᴛɪᴍᴏɴɪ : <a href=https://t.me/testipriaindia>ᴄʟɪᴄᴋ</a> </blockquote>"
+            f" <blockquote><b> ᴛᴇʀɪᴍᴀᴋᴀsɪʜ ᴛᴇʟᴀʜ ᴏʀᴅᴇʀ ᴅɪ <a href=tg://openmessage?user_id={OWNER_ID}>Senna ✮</a></blockquote>"
         )
         await izzy_ganteng.edit(response)
 

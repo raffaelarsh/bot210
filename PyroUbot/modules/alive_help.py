@@ -91,7 +91,7 @@ async def _(client, inline_query):
         peer_users: {users} users
         peer_group: {group} group
         start_uptime: {uptime}</blockquote>
-        <blockquote><b>USERBOT PREM YOGZ</b></blockquote>
+        <blockquote><b>USERBOT PREM SENNA</b></blockquote>
 """
             await client.answer_inline_query(
                 inline_query.id,
@@ -188,7 +188,7 @@ async def user_help_inline(client, inline_query):
         f"{inline_query.from_user.first_name} {inline_query.from_user.last_name or ''}</a>\n"
         f"ᴛᴏᴛᴀʟ ᴍᴏᴅᴜʟᴇs: {len(HELP_COMMANDS)}\n"
         f"ᴘʀᴇꜰɪx: {' '.join(SH)}\n"
-        f"ᴍʏ ᴜʙᴏᴛ: <a href=t.me/UbotPremYogzz_bot>UbotPremYogzz_bot</a>"
+        f"ᴍʏ ᴜʙᴏᴛ: <a href=t.me/{bot.me.username}>{bot.me.username}</a>"
         f"</b></blockquote>"
     )
 
@@ -226,7 +226,7 @@ async def help_callback(client, callback_query):
     tutup_match = re.match(r"help_tutup\((.+?)\)", callback_query.data)
     back_match = re.match(r"help_back", callback_query.data)
     SH = await ubot.get_prefix(callback_query.from_user.id)
-    top_text = f"<blockquote><b>✣ ᴍᴇɴᴜ ɪɴʟɪɴᴇ <a href=tg://user?id={callback_query.from_user.id}>{callback_query.from_user.first_name} {callback_query.from_user.last_name or ''}</a>\n  ᴛᴏᴛᴀʟ ᴍᴏᴅᴜʟᴇs: {len(HELP_COMMANDS)}\n  ᴘʀᴇꜰɪx: {' '.join(SH)}\n ᴍʏ ᴜʙᴏᴛ: <a href=t.me/UbotPremYogzz_bot>UbotPremYogzz_bot</a></b></blockquote>"
+    top_text = f"<blockquote><b>✣ ᴍᴇɴᴜ ɪɴʟɪɴᴇ <a href=tg://user?id={callback_query.from_user.id}>{callback_query.from_user.first_name} {callback_query.from_user.last_name or ''}</a>\n  ᴛᴏᴛᴀʟ ᴍᴏᴅᴜʟᴇs: {len(HELP_COMMANDS)}\n  ᴘʀᴇꜰɪx: {' '.join(SH)}\n ᴍʏ ᴜʙᴏᴛ: <a href=t.me/{bot.me.username}>{bot.me.username}</a></b></blockquote>"
 
     if mod_match:
         module = (mod_match.group(1)).replace(" ", "_")
