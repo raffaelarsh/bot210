@@ -14,6 +14,7 @@ tes/
 *.session
 *.session-journal
 proxy.txt
+storage/bc24/
 
 # Backups
 *.bak
