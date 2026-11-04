@@ -102,7 +102,7 @@ class BTN:
 
     def ALWAYSSENNA(message):
         button = [
-            [InlineKeyboardButton("room public", url="https://t.me/anyonima")],
+            [InlineKeyboardButton("room public", url="https://t.me/duelemoji")],
         ]
         return button
 
@@ -150,7 +150,7 @@ class BTN:
             button = [
                 [InlineKeyboardButton("⦪ ʙᴇʟɪ ᴜꜱᴇʀʙᴏᴛ ⦫", callback_data="bahan")],
                 [
-                    InlineKeyboardButton("✭ ʀᴏᴏᴍ ᴘᴜʙʟɪᴄ ✭", url="https://t.me/anyonima")
+                    InlineKeyboardButton("✭ ʀᴏᴏᴍ ᴘᴜʙʟɪᴄ ✭", url="https://t.me/duelemoji")
                 ],
                 [
                     InlineKeyboardButton("⦪ ʙᴜᴀᴛ ᴜsᴇʀʙᴏᴛ ⳼", callback_data="buat_ubot"),
