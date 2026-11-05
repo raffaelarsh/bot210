@@ -244,7 +244,7 @@ def _stop_task(user_id):
 async def _resume_all():
     try:
         await asyncio.sleep(5)
-        for client in list(ubot._ubot):
+        for client in ubot._ubot[:]:
             try:
                 if _load(client.me.id).get("running"):
                     _start_task(client)
