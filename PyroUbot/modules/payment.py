@@ -1,7 +1,10 @@
 import asyncio
 from datetime import datetime
+from io import BytesIO
 
+import httpx
 from dateutil.relativedelta import relativedelta
+from pyrogram.errors import MessageNotModified
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pytz import timezone
 
@@ -23,7 +26,7 @@ async def _(client, callback_query):
             f"""
 <blockquote><b>ꜱɪʟᴀʜᴋᴀɴ ᴍᴇʟᴀᴋᴜᴋᴀɴ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴛᴇʀʟᴇʙɪʜ ᴛᴀʜᴜʟᴜ ᴋᴇ ᴅᴀɴᴀ ᴅɪ ʙᴀᴡᴀʜ ɪɴɪ</b>           
 
-ᴅᴀɴᴀ : || '089521870624` ||
+ᴅᴀɴᴀ : || '089619601820` ||
 
 <b>💬 sɪʟᴀʜᴋᴀɴ ᴋɪʀɪᴍᴋᴀɴ ʙᴜᴋᴛɪ sᴄʀᴇᴇɴsʜᴏᴛ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴀɴᴅᴀ: {full_name}</b></blockquote>
 """,
@@ -69,26 +72,105 @@ async def _(client, callback_query):
 
 @PY.CALLBACK("^(kurang|tambah)")
 async def _(client, callback_query):
-    BULAN = int(callback_query.data.split()[1])
-    HARGA = 10
-    QUERY = callback_query.data.split()[0]
+    action, _, raw_days = callback_query.data.partition(" ")
+    paket = sorted(PREMIUM_PLANS)
     try:
-        if QUERY == "kurang":
-            if BULAN > 1:
-                BULAN -= 1
-                TOTAL_HARGA = HARGA * BULAN
-        elif QUERY == "tambah":
-            if BULAN < 12:
-                BULAN += 1
-                TOTAL_HARGA = HARGA * BULAN
-        buttons = BTN.PLUS_MINUS(BULAN, callback_query.from_user.id)
+        idx = paket.index(int(raw_days))
+    except ValueError:
+        idx = 0
+    if action == "kurang" and idx > 0:
+        idx -= 1
+    elif action == "tambah" and idx < len(paket) - 1:
+        idx += 1
+    days = paket[idx]
+    buttons = BTN.PLUS_MINUS(days, callback_query.from_user.id)
+    try:
         await callback_query.message.edit_text(
-            MSG.TEXT_PAYMENT(HARGA, TOTAL_HARGA, BULAN),
+            MSG.TEXT_PAYMENT(days, PREMIUM_PLANS[days]),
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(buttons),
         )
-    except:
+    except MessageNotModified:
         pass
+    await callback_query.answer()
+
+
+@PY.CALLBACK("^qris_pay \\d+$")
+async def _(client, callback_query):
+    user_id = callback_query.from_user.id
+    try:
+        days = int(callback_query.data.split()[1])
+    except (IndexError, ValueError):
+        return await callback_query.answer("Paket tidak valid.", show_alert=True)
+    try:
+        trx = await create_qris(user_id, days)
+    except AutoGoPayError as e:
+        return await callback_query.answer(str(e)[:190], show_alert=True)
+
+    caption = (
+        "<b>⚡ Pembayaran QRIS Otomatis</b>\n\n"
+        f"Durasi: {trx['days']} hari\n"
+        f"Total bayar: {format_rupiah(trx['amount'])}\n"
+        f"ID transaksi: <code>{trx['_id']}</code>\n\n"
+        "Cara bayar: scan QR di atas memakai GoPay atau aplikasi pembayaran QRIS lain. "
+        "Premium aktif otomatis setelah pembayaran terdeteksi.\n"
+        f"Berlaku sampai: {format_wib(trx['expires_at'])} WIB"
+    )
+    markup = InlineKeyboardMarkup(
+        [[InlineKeyboardButton("❌ Batalkan QRIS", callback_data="qris_cancel")]]
+    )
+    try:
+        msg = await bot.send_photo(user_id, trx["qr_url"], caption=caption, reply_markup=markup)
+    except Exception:
+        try:
+            async with httpx.AsyncClient(timeout=20) as http:
+                resp = await http.get(trx["qr_url"])
+                resp.raise_for_status()
+            image = BytesIO(resp.content)
+            image.name = "qris.png"
+            msg = await bot.send_photo(user_id, image, caption=caption, reply_markup=markup)
+        except Exception as e:
+            print(f"[AUTOGOPAY] gagal mengirim QR {trx['_id']}: {e}")
+            await cancel_pending(user_id)
+            return await callback_query.answer(
+                "Gagal menampilkan QRIS, coba lagi.", show_alert=True
+            )
+
+    await attach_message(trx["_id"], msg.chat.id, msg.id)
+    try:
+        await callback_query.message.delete()
+    except Exception:
+        pass
+    await callback_query.answer()
+
+
+@PY.CALLBACK("^qris_cancel$")
+async def _(client, callback_query):
+    user_id = callback_query.from_user.id
+    try:
+        state, _trx = await cancel_pending(user_id)
+    except AutoGoPayError as e:
+        return await callback_query.answer(str(e)[:190], show_alert=True)
+
+    if state == "paid":
+        await callback_query.answer(
+            "Pembayaran sudah berhasil. Premium Anda sudah aktif.", show_alert=True
+        )
+        return
+    if state == "none":
+        return await callback_query.answer("Tidak ada QRIS yang perlu dibatalkan.", show_alert=True)
+
+    await callback_query.answer()
+    await bot.send_message(
+        user_id,
+        "<b>❌ QRIS dibatalkan</b>\n\nPilih paket lagi jika ingin mencoba kembali.",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("💳 Bayar Dulu", callback_data="bayar_dulu")],
+                [InlineKeyboardButton("⬅ Kembali", callback_data=f"home {user_id}")],
+            ]
+        ),
+    )
 
 
 @PY.CALLBACK("^(success|failed|home)")

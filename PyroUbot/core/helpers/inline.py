@@ -148,6 +148,7 @@ class BTN:
     def START(message):
         if not message.from_user.id == OWNER_ID:
             button = [
+                [InlineKeyboardButton("🎁 Coba Trial", callback_data="trial_start")],
                 [InlineKeyboardButton("⦪ ʙᴇʟɪ ᴜꜱᴇʀʙᴏᴛ ⦫", callback_data="bahan")],
                 [
                     InlineKeyboardButton("✭ ʀᴏᴏᴍ ᴘᴜʙʟɪᴄ ✭", url="https://t.me/duelemoji")
@@ -174,16 +175,15 @@ class BTN:
     def PLUS_MINUS(query, user_id):
         button = [
             [
-                InlineKeyboardButton(
-                    "-1",
-                    callback_data=f"kurang {query}",
-                ),
-                InlineKeyboardButton(
-                    "+1",
-                    callback_data=f"tambah {query}",
-                ),
+                InlineKeyboardButton("◀", callback_data=f"kurang {query}"),
+                InlineKeyboardButton("▶", callback_data=f"tambah {query}"),
             ],
-            [InlineKeyboardButton("⦪ ᴋᴏɴꜰɪʀᴍᴀsɪ ⦫", callback_data="confirm")],
+            [
+                InlineKeyboardButton(
+                    "⚡ Bayar QRIS (Otomatis)", callback_data=f"qris_pay {query}"
+                )
+            ],
+            [InlineKeyboardButton("Bayar manual (kirim bukti)", callback_data="confirm")],
             [InlineKeyboardButton("⦪ ʙᴀᴛᴀʟᴋᴀɴ ⦫", callback_data=f"home {user_id}")],
         ]
         return button
@@ -226,16 +226,15 @@ class BTN:
     def PLUS_MINUS(query, user_id):
         button = [
             [
-                InlineKeyboardButton(
-                    "-1",
-                    callback_data=f"kurang {query}",
-                ),
-                InlineKeyboardButton(
-                    "+1",
-                    callback_data=f"tambah {query}",
-                ),
+                InlineKeyboardButton("◀", callback_data=f"kurang {query}"),
+                InlineKeyboardButton("▶", callback_data=f"tambah {query}"),
             ],
-            [InlineKeyboardButton("⦪ ᴋᴏɴꜰɪʀᴍᴀsɪ ⦫", callback_data="confirm")],
+            [
+                InlineKeyboardButton(
+                    "⚡ Bayar QRIS (Otomatis)", callback_data=f"qris_pay {query}"
+                )
+            ],
+            [InlineKeyboardButton("Bayar manual (kirim bukti)", callback_data="confirm")],
             [InlineKeyboardButton("⦪ ʙᴀᴛᴀʟᴋᴀɴ ⦫", callback_data=f"home {user_id}")],
         ]
         return button

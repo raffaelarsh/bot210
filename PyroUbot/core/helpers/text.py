@@ -1,6 +1,6 @@
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from PyroUbot import OWNER_ID, bot, ubot, get_expired_date
+from PyroUbot import OWNER_ID, PREMIUM_PLANS, bot, ubot, get_expired_date, format_rupiah
 
 
 class MSG:     
@@ -27,20 +27,26 @@ class MSG:
 ᴋʟɪᴋ ᴛᴏᴍʙᴏʟ ᴅɪʙᴀᴡᴀʜ ᴜɴᴛᴜᴋ ᴍᴇᴍʙᴜᴀᴛ ᴜsᴇʀʙᴏᴛ</b></blockquote>
 """
 
-    def TEXT_PAYMENT(harga, total, bulan):
+    def TEXT_PAYMENT(days, harga):
+        paket = "\n".join(
+            f"<b>├ {d} ʜᴀʀɪ: {format_rupiah(p)}</b>" for d, p in sorted(PREMIUM_PLANS.items())
+        )
         return f"""
-<blockquote><b>💬 sɪʟᴀʜᴋᴀɴ ᴍᴇʟᴀᴋᴜᴋᴀɴ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴛᴇʀʟᴇʙɪʜ ᴅᴀʜᴜʟᴜ</b>
+<blockquote><b>💬 sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴘᴀᴋᴇᴛ ᴅᴀɴ ᴍᴇᴛᴏᴅᴇ ᴘᴇᴍʙᴀʏᴀʀᴀɴ</b>
 
-<b>🎟️ ʜᴀʀɢᴀ ᴘᴇʀʙᴜʟᴀɴ: {harga}.000</b>
+<b>📦 ᴘᴀᴋᴇᴛ ᴅɪᴘɪʟɪʜ: {days} ʜᴀʀɪ</b>
+<b>🔖 ᴛᴏᴛᴀʟ ʜᴀʀɢᴀ: {format_rupiah(harga)}</b>
 
-<b>💳 ᴍᴏᴛᴏᴅᴇ ᴘᴇᴍʙᴀʏᴀʀᴀɴ:</b>
- <b>├ Qʀɪꜱ ᴀʟʟ ᴘᴀʏᴍᴇɴᴛ </b>
-<b>🔖 ᴛᴏᴛᴀʟ ʜᴀʀɢᴀ: ʀᴘ {total}.000</b>
-<b>🗓️ ᴛᴏᴛᴀʟ ʙᴜʟᴀɴ: {bulan}</b> 
+<b>🏷 ᴅᴀꜰᴛᴀʀ ᴘᴀᴋᴇᴛ:</b>
+{paket}
 
-OWNER BOT : <a href=tg://openmessage?user_id={OWNER_ID}>@anyonima</a> 
+<b>💳 ᴍᴇᴛᴏᴅᴇ ᴘᴇᴍʙᴀʏᴀʀᴀɴ:</b>
+<b>├ ⚡ ǫʀɪs ᴏᴛᴏᴍᴀᴛɪs</b> (ᴋᴏɴꜰɪʀᴍᴀsɪ ᴏᴛᴏᴍᴀᴛɪꜱ ꜱᴇᴛᴇʟᴀʜ ʙᴀʏᴀʀ)
+<b>╰ ᴍᴀɴᴜᴀʟ</b> (ᴋɪʀɪᴍ ʙᴜᴋᴛɪ ᴋᴇ ᴏᴡɴᴇʀ ᴊɪᴋᴀ ǫʀɪs ᴛɪᴅᴀᴋ ʙɪsᴀ)
 
-<b>🛍 ᴋʟɪᴋ ᴛᴏᴍʙᴏʟ ᴋᴏɴꜰɪʀᴍᴀsɪ ᴜɴᴛᴜᴋ ᴋɪʀɪᴍ ʙᴜᴋᴛɪ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴀɴᴅᴀ</b></blockquote>
+OWNER BOT : <a href=tg://openmessage?user_id={OWNER_ID}>@anyonima</a>
+
+<b>🛍 ᴋʟɪᴋ ᴛᴏᴍʙᴏʟ ᴜɴᴛᴜᴋ ᴍᴇʟᴀɴᴊᴜᴛᴋᴀɴ ᴘᴇᴍʙᴀʏᴀʀᴀɴ</b></blockquote>
 """
 
     async def UBOT(count):

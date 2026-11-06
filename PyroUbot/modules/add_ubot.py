@@ -172,9 +172,10 @@ async def _(client, callback_query):
 @PY.CALLBACK("bayar_dulu")
 async def _(client, callback_query):
     user_id = callback_query.from_user.id
-    buttons = BTN.PLUS_MINUS(1, user_id)
+    days = min(PREMIUM_PLANS)
+    buttons = BTN.PLUS_MINUS(days, user_id)
     return await callback_query.edit_message_text(
-        MSG.TEXT_PAYMENT(30, 30, 1),
+        MSG.TEXT_PAYMENT(days, PREMIUM_PLANS[days]),
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(buttons),
     )

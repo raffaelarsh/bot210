@@ -22,3 +22,25 @@ RMBG_API = os.getenv("RMBG_API", "")
 MONGO_URL = os.getenv("MONGO_URL", "")
 
 LOGS_MAKER_UBOT = int(os.getenv("LOGS_MAKER_UBOT", "-1002671518601"))
+
+# ── AutoGoPay (pembayaran QRIS otomatis) ──────────────────────────
+AUTOGOPAY_API_KEY = os.getenv("AUTOGOPAY_API_KEY", "")
+AUTOGOPAY_BASE_URL = os.getenv("AUTOGOPAY_BASE_URL", "https://v1-gateway.autogopay.site")
+QRIS_EXPIRE_MINUTES = int(os.getenv("QRIS_EXPIRE_MINUTES", "10"))
+QRIS_POLL_INTERVAL = int(os.getenv("QRIS_POLL_INTERVAL", "6"))
+
+# Paket premium: key = jumlah hari, value = harga (rupiah)
+PREMIUM_PLANS = {7: 3000, 14: 5000, 30: 10000}
+
+# ── Coba trial ────────────────────────────────────────────────────
+# chat_id 3 grup wajib dipisah koma, mis. -100111,-100222,-100333
+GROUP_TRIAL_IDS = [
+    int(x) for x in os.getenv("GROUP_TRIAL_IDS", "").replace(",", " ").split()
+]
+TRIAL_GROUP_LINKS = [
+    "https://t.me/+Lk08j0_KoFc4N2Zl",
+    "https://t.me/+2Y_Vst_Ma-4xNjU1",
+    "https://t.me/+ozJtAftBy-83MjBl",
+]
+TRIAL_DAYS = 5
+TRIAL_BROADCAST_HOURS = 6

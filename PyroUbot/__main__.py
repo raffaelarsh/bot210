@@ -27,7 +27,13 @@ async def main():
             await remove_ubot(int(_ubot["name"]))
             print(f"[ɪɴғᴏ]: {int(_ubot['name'])} ʙᴇʀʜᴀsɪʟ ᴅɪ ʜᴀᴘᴜs")
     await bash("rm -rf *session*")
-    await asyncio.gather(loadPlugins(), installPeer(), expiredUserbots())
+    await asyncio.gather(
+        loadPlugins(),
+        installPeer(),
+        expiredUserbots(),
+        autogopay_poller(),
+        trial_scheduler(),
+    )
     stop_event = asyncio.Event()
     loop = asyncio.get_running_loop()
     for s in (signal.SIGINT, signal.SIGTERM):

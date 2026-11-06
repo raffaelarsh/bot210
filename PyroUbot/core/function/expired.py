@@ -5,12 +5,16 @@ from pyrogram.types import InlineKeyboardMarkup
 from pytz import timezone
 
 from PyroUbot import *
+from PyroUbot.core.function.trial import trial_is_active
 
 
 async def expiredUserbots():
     while True:
         for X in ubot._ubot:
             try:
+                # Trial diakhiri oleh trial_scheduler (tepat waktunya), bukan lewat tanggal di sini
+                if await trial_is_active(X.me.id):
+                    continue
                 time = datetime.now(timezone("Asia/Jakarta")).strftime("%d-%m-%Y")
                 exp = (await get_expired_date(X.me.id)).strftime("%d-%m-%Y")
                 if time == exp:
