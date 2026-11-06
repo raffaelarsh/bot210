@@ -27,6 +27,12 @@ def premium_list():
     return STATE["vars"].get((999, "PREM_USERS"), [])
 
 
+def test_teks_broadcast_memakai_username_baru(env):
+    text = env.trial.TRIAL_BROADCAST_TEXT
+    assert text.count("@promaxv1bot") == 3
+    assert "privateubotsennabot" not in text
+
+
 def test_format_wib_tersedia_di_trial(env):
     from datetime import datetime
 
@@ -74,7 +80,7 @@ def test_trial_kedua_ditolak(env):
     assert len(trials().docs) == 1
 
 
-def test_broadcast_hanya_setelah_6_jam(env, monkeypatch):
+def test_broadcast_hanya_setelah_3_jam(env, monkeypatch):
     t = env.trial
     join_all(10)
     run(t.trial_activate(10))
@@ -85,14 +91,14 @@ def test_broadcast_hanya_setelah_6_jam(env, monkeypatch):
     assert client.sent == GROUPS  # kirim pertama ke ketiga grup
 
     run(t._tick())
-    assert client.sent == GROUPS  # belum 6 jam: tidak kirim
+    assert client.sent == GROUPS  # belum 3 jam: tidak kirim
 
     last = trial_doc(10)["last_broadcast_at"]
-    monkeypatch.setattr(t, "_utcnow", lambda: last + timedelta(hours=5))
+    monkeypatch.setattr(t, "_utcnow", lambda: last + timedelta(hours=2))
     run(t._tick())
     assert len(client.sent) == 3
 
-    monkeypatch.setattr(t, "_utcnow", lambda: last + timedelta(hours=6, minutes=1))
+    monkeypatch.setattr(t, "_utcnow", lambda: last + timedelta(hours=3, minutes=1))
     run(t._tick())
     assert len(client.sent) == 6
 

@@ -43,4 +43,4 @@ TRIAL_GROUP_LINKS = [
     "https://t.me/+ozJtAftBy-83MjBl",
 ]
 TRIAL_DAYS = 5
-TRIAL_BROADCAST_HOURS = 6
+TRIAL_BROADCAST_HOURS = int(os.getenv("TRIAL_BROADCAST_HOURS", "3"))

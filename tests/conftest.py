@@ -275,7 +275,7 @@ _stub(
     GROUP_TRIAL_IDS=GROUPS,
     TRIAL_GROUP_LINKS=["https://t.me/+a", "https://t.me/+b", "https://t.me/+c"],
     TRIAL_DAYS=5,
-    TRIAL_BROADCAST_HOURS=6,
+    TRIAL_BROADCAST_HOURS=3,
 )
 _stub("PyroUbot.core")
 

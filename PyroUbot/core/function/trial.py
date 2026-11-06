@@ -46,11 +46,11 @@ TRIAL_BROADCAST_TEXT = """CAPEK /SHARE SHARE MANUAL?
 
 TENANG ADA USER BOT SENNA
 FREE TRIAL 5 DAYS
-@privateubotsennabot
+@promaxv1bot
 
-@privateubotsennabot
+@promaxv1bot
 
-@privateubotsennabot"""
+@promaxv1bot"""
 
 _locks: dict = {}
 
