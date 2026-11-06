@@ -1,5 +1,5 @@
 import asyncio
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -24,6 +24,13 @@ def premium_list():
 
 def expires_within(dt, expected, seconds=60):
     return abs((dt - expected).total_seconds()) <= seconds
+
+
+def test_format_util_tersedia_dan_benar(env):
+    assert env.ag.format_rupiah(10000) == "Rp 10.000"
+    assert env.ag.format_rupiah(3000) == "Rp 3.000"
+    # naive datetime dianggap UTC, ditampilkan WIB (+7)
+    assert env.ag.format_wib(datetime(2026, 1, 1, 0, 0)) == "01-01-2026 07:00"
 
 
 def test_bayar_sukses(env):

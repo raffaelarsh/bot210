@@ -27,6 +27,12 @@ def premium_list():
     return STATE["vars"].get((999, "PREM_USERS"), [])
 
 
+def test_format_wib_tersedia_di_trial(env):
+    from datetime import datetime
+
+    assert env.trial.format_wib(datetime(2026, 1, 1, 0, 0)) == "01-01-2026 07:00"
+
+
 def test_join_tiga_grup_lalu_aktif(env):
     t = env.trial
     join_all(10)

@@ -23,6 +23,7 @@ from PyroUbot.core.database.variabel import (
     remove_all_vars,
     remove_from_vars,
 )
+from PyroUbot.core.format_util import format_wib
 
 __all__ = [
     "TRIAL_BROADCAST_TEXT",

@@ -14,7 +14,6 @@ import asyncio
 from datetime import datetime, timedelta, timezone as dt_timezone
 
 import httpx
-import pytz
 from pymongo import ReturnDocument
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -30,6 +29,7 @@ from PyroUbot.config import (
 from PyroUbot.core.database import mongodb
 from PyroUbot.core.database.expired import get_expired_date, set_expired_date
 from PyroUbot.core.database.variabel import add_to_vars, get_list_from_vars
+from PyroUbot.core.format_util import _to_jakarta, _to_utc_naive, format_rupiah, format_wib
 
 __all__ = [
     "AutoGoPayError",
@@ -42,7 +42,6 @@ __all__ = [
 ]
 
 TRX = mongodb["autogopay_trx"]
-JAKARTA = pytz.timezone("Asia/Jakarta")
 
 # Status gateway yang berarti transaksi sudah tidak bisa dibayar
 GATEWAY_DEAD = {"expire", "expired", "cancel", "cancelled", "deny", "denied", "failure", "failed"}
@@ -60,26 +59,6 @@ class AutoGoPayError(Exception):
 
 def _utcnow() -> datetime:
     return datetime.now(dt_timezone.utc).replace(tzinfo=None)
-
-
-def _to_utc_naive(dt):
-    if dt is None:
-        return None
-    if dt.tzinfo is None:
-        return dt  # Mongo / data naive dianggap UTC
-    return dt.astimezone(dt_timezone.utc).replace(tzinfo=None)
-
-
-def _to_jakarta(dt):
-    return pytz.utc.localize(_to_utc_naive(dt)).astimezone(JAKARTA)
-
-
-def format_wib(dt) -> str:
-    return _to_jakarta(dt).strftime("%d-%m-%Y %H:%M")
-
-
-def format_rupiah(amount: int) -> str:
-    return "Rp " + f"{int(amount):,}".replace(",", ".")
 
 
 def _user_lock(user_id: int) -> asyncio.Lock:

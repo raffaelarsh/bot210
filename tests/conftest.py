@@ -303,6 +303,8 @@ def _load(name, relpath):
     return mod
 
 
+format_util = _load("PyroUbot.core.format_util", os.path.join("core", "format_util.py"))
+setattr(sys.modules["PyroUbot.core"], "format_util", format_util)
 autogopay = _load("PyroUbot.core.function.autogopay", os.path.join("core", "function", "autogopay.py"))
 trial = _load("PyroUbot.core.function.trial", os.path.join("core", "function", "trial.py"))
 

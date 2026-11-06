@@ -1,6 +1,7 @@
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from PyroUbot import OWNER_ID, PREMIUM_PLANS, bot, ubot, get_expired_date, format_rupiah
+from PyroUbot import OWNER_ID, PREMIUM_PLANS, bot, ubot, get_expired_date
+from PyroUbot.core.format_util import format_rupiah
 
 
 class MSG:     
