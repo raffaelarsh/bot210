@@ -53,9 +53,15 @@ class _PY:
 _stub("pyrogram")
 _stub("pyrogram.enums", ParseMode=SimpleNamespace(DISABLED="disabled"))
 _stub("pyrogram.errors", RPCError=RPCError, FloodWait=FloodWait, MessageNotModified=MessageNotModified)
+def _time_fungsi():
+    """Meniru `from time import time` di tools.py yang ikut ter-star-import."""
+    return 0.0
+
+
 _stub(
     "PyroUbot",
     PY=_PY(),
+    time=_time_fungsi,  # regresi: harus tidak menimpa modul time di match.py
     bot=None,
     ubot=SimpleNamespace(get_prefix=_get_prefix),
     set_vars=_noop,

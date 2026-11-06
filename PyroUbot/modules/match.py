@@ -1,10 +1,12 @@
-import asyncio
-import time
-
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait, MessageNotModified
 
 from PyroUbot import *
+
+# Diimpor SETELAH star import: PyroUbot.core.helpers.tools mengekspor `time`
+# (fungsi), yang akan menimpa modul `time` jika diimpor di atas.
+import asyncio  # noqa: E402
+from time import monotonic  # noqa: E402
 
 __MODULE__ = "ᴍᴀᴛᴄʜ"
 __HELP__ = """
@@ -155,7 +157,7 @@ async def _animate(target, frames, start, shown):
             nxt = 0  # frame pertama langsung tampil
         elif i >= last:
             return
-        elif time.monotonic() - start + FRAME_DELAY > MAX_TOTAL:
+        elif monotonic() - start + FRAME_DELAY > MAX_TOTAL:
             nxt = last  # sisa waktu tidak cukup: lompat ke frame akhir
         else:
             await asyncio.sleep(FRAME_DELAY)
@@ -204,7 +206,7 @@ async def _send_sticker(client, message, file_id, cmd, prefix):
 
 async def _play(client, message, cmd, var, frames, prefix):
     frames = _dedupe(frames)
-    start = time.monotonic()
+    start = monotonic()
     own = bool(
         getattr(message, "outgoing", False)
         or (message.from_user is not None and message.from_user.id == client.me.id)
