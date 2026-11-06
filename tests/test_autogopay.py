@@ -207,9 +207,108 @@ def test_gangguan_jaringan_diabaikan_lalu_dicoba_lagi(env):
         await ag.poll_once()  # tidak boleh melempar error
         assert find_trx(doc["_id"])["status"] == "pending"
         gw.network_down = False
+        ag._status_retry_at[doc["_id"]] = ag._utcnow() - timedelta(seconds=1)
         gw.status[doc["_id"]] = "settlement"
         await ag.poll_once()
         return doc["_id"]
 
     tx = run(scenario())
     assert find_trx(tx)["status"] == "paid"
+
+
+def test_pesan_gateway_ditampilkan(env):
+    ag, gw = env.ag, env.gw
+
+    async def scenario():
+        gw.fail_status = 1
+        gw.fail_message = "Rate limit tercapai"
+        with pytest.raises(ag.AutoGoPayError) as exc:
+            await ag._gw("/qris/status", {"transaction_id": "TX"})
+        return str(exc.value)
+
+    assert "Rate limit tercapai" in run(scenario())
+
+
+def test_status_gagal_di_backoff(env):
+    ag, gw = env.ag, env.gw
+
+    async def scenario():
+        doc = await ag.create_qris(10, 7)
+        gw.fail_status = 99
+        await ag.poll_once()  # gagal -> dijadwalkan ulang
+        await ag.poll_once()  # masih dalam masa backoff, tidak memanggil gateway
+        return doc["_id"]
+
+    tx = run(scenario())
+    assert len([c for c in gw.calls if c[0] == "/qris/status"]) == 1
+    assert find_trx(tx)["status"] == "pending"
+
+
+def test_status_dicek_lagi_setelah_backoff(env):
+    ag, gw = env.ag, env.gw
+
+    async def scenario():
+        doc = await ag.create_qris(10, 7)
+        gw.fail_status = 1
+        await ag.poll_once()
+        tx = doc["_id"]
+        ag._status_retry_at[tx] = ag._utcnow() - timedelta(seconds=1)
+        gw.status[tx] = "settlement"
+        await ag.poll_once()
+        return tx
+
+    tx = run(scenario())
+    assert find_trx(tx)["status"] == "paid"
+    assert tx not in env.ag._status_retry_at
+
+
+def test_batal_user_memicu_cooldown(env):
+    ag = env.ag
+
+    async def scenario():
+        await ag.create_qris(10, 7)
+        await ag.cancel_pending(10, apply_cooldown=True)
+        with pytest.raises(ag.AutoGoPayError) as exc:
+            await ag.create_qris(10, 7)
+        return str(exc.value)
+
+    msg = run(scenario())
+    assert "menit" in msg
+    assert len([c for c in env.gw.calls if c[0] == "/qris/generate"]) == 1
+
+
+def test_cooldown_berakhir_bisa_beli_lagi(env):
+    ag = env.ag
+
+    async def scenario():
+        await ag.create_qris(10, 7)
+        await ag.cancel_pending(10, apply_cooldown=True)
+        ag.COOLDOWN.docs[0]["until"] = ag._utcnow() - timedelta(seconds=1)
+        return await ag.create_qris(10, 7)
+
+    doc = run(scenario())
+    assert doc["status"] == "pending"
+
+
+def test_batal_otomatis_tidak_memicu_cooldown(env):
+    ag = env.ag
+
+    async def scenario():
+        await ag.create_qris(10, 7)
+        await ag.create_qris(10, 14)  # QRIS lama dibatalkan otomatis
+        return await ag.create_qris(10, 30)
+
+    doc = run(scenario())
+    assert doc["days"] == 30
+
+
+def test_batal_tanpa_pending_tidak_memicu_cooldown(env):
+    ag = env.ag
+
+    async def scenario():
+        state, _ = await ag.cancel_pending(10, apply_cooldown=True)
+        assert state == "none"
+        return await ag.create_qris(10, 7)
+
+    doc = run(scenario())
+    assert doc["status"] == "pending"

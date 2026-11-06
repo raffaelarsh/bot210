@@ -138,9 +138,6 @@ async def cekidte(client, message):
         await waiting_msg.delete()
         await message.reply_photo(profile_card_path, caption=msg, quote=True)
         os.remove(profile_card_path)
-
-        if os.path.exists(profile_photo_path):
-            os.remove(profile_photo_path)
     else:
         await waiting_msg.edit_text("❌ Gagal membuat kartu profil! Pastikan default.jpg tersedia.", disable_web_page_preview=True)
         

@@ -148,7 +148,7 @@ async def _(client, callback_query):
 async def _(client, callback_query):
     user_id = callback_query.from_user.id
     try:
-        state, _trx = await cancel_pending(user_id)
+        state, _trx = await cancel_pending(user_id, apply_cooldown=True)
     except AutoGoPayError as e:
         return await callback_query.answer(str(e)[:190], show_alert=True)
 
@@ -163,7 +163,9 @@ async def _(client, callback_query):
     await callback_query.answer()
     await bot.send_message(
         user_id,
-        "<b>❌ QRIS dibatalkan</b>\n\nPilih paket lagi jika ingin mencoba kembali.",
+        "<b>❌ QRIS dibatalkan</b>\n\n"
+        f"Untuk mencegah spam, Anda bisa membuat QRIS baru dalam "
+        f"{QRIS_CANCEL_COOLDOWN_MINUTES} menit.",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("💳 Bayar Dulu", callback_data="bayar_dulu")],

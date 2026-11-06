@@ -270,6 +270,7 @@ _stub(
     AUTOGOPAY_BASE_URL="https://gw.test",
     QRIS_EXPIRE_MINUTES=10,
     QRIS_POLL_INTERVAL=6,
+    QRIS_CANCEL_COOLDOWN_MINUTES=5,
     PREMIUM_PLANS={7: 3000, 14: 5000, 30: 10000},
     OWNER_ID=1,
     GROUP_TRIAL_IDS=GROUPS,
@@ -331,6 +332,8 @@ class Gateway:
         self.calls = []
         self.counter = 0
         self.network_down = False
+        self.fail_status = 0
+        self.fail_message = "gateway sedang sibuk"
 
     async def post(self, path, body):
         import httpx
@@ -347,6 +350,9 @@ class Gateway:
                 "data": {"transaction_id": tx, "amount": body["amount"], "qr_url": f"https://qr.test/{tx}.png"},
             }
         if path == "/qris/status":
+            if self.fail_status:
+                self.fail_status -= 1
+                return {"success": False, "message": self.fail_message}
             tx = body["transaction_id"]
             return {"success": True, "data": {"transaction_status": self.status.get(tx, "pending")}}
         if path == "/qris/cancel":
@@ -370,6 +376,8 @@ def env(monkeypatch):
     gw = Gateway()
     monkeypatch.setattr(autogopay, "_post", gw.post)
     monkeypatch.setattr(autogopay, "AUTOGOPAY_API_KEY", "test-key")
+    autogopay._status_failures.clear()
+    autogopay._status_retry_at.clear()
 
     async def _nosleep(*a, **k):
         return None

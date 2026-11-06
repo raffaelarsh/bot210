@@ -23,6 +23,7 @@ from PyroUbot.config import (
     AUTOGOPAY_BASE_URL,
     OWNER_ID,
     PREMIUM_PLANS,
+    QRIS_CANCEL_COOLDOWN_MINUTES,
     QRIS_EXPIRE_MINUTES,
     QRIS_POLL_INTERVAL,
 )
@@ -42,13 +43,19 @@ __all__ = [
 ]
 
 TRX = mongodb["autogopay_trx"]
+COOLDOWN = mongodb["autogopay_cooldown"]
 
 # Status gateway yang berarti transaksi sudah tidak bisa dibayar
 GATEWAY_DEAD = {"expire", "expired", "cancel", "cancelled", "deny", "denied", "failure", "failed"}
 # Transaksi "processing" yang klaimnya lebih tua dari ini dianggap sisa crash
 CLAIM_STALE_SECONDS = 60
+# Jeda cek status saat gateway gagal (backoff eksponensial)
+STATUS_RETRY_BASE_SECONDS = 30
+STATUS_RETRY_MAX_SECONDS = 120
 
 _locks: dict = {}
+_status_failures: dict = {}
+_status_retry_at: dict = {}
 
 
 class AutoGoPayError(Exception):
@@ -93,7 +100,12 @@ async def _gw(path: str, body: dict) -> dict:
     _require_key()
     res = await _post(path, body)
     if not res.get("success"):
-        raise AutoGoPayError("Gagal memproses permintaan pembayaran, coba lagi.")
+        msg = str(res.get("message") or "").strip()
+        raise AutoGoPayError(
+            f"AutoGoPay: {msg}"
+            if msg
+            else "Gagal memproses permintaan pembayaran, coba lagi."
+        )
     return res.get("data") or {}
 
 
@@ -275,12 +287,36 @@ async def _resolve_pending_locked(user_id: int):
 
 # ── API publik ────────────────────────────────────────────────────
 
+async def _cancel_cooldown_until(user_id: int):
+    doc = await COOLDOWN.find_one({"_id": user_id})
+    if not doc:
+        return None
+    until = doc.get("until")
+    if not until:
+        return None
+    return until if until > _utcnow() else None
+
+
+async def _apply_cancel_cooldown(user_id: int):
+    await COOLDOWN.update_one(
+        {"_id": user_id},
+        {"$set": {"until": _utcnow() + timedelta(minutes=QRIS_CANCEL_COOLDOWN_MINUTES)}},
+        upsert=True,
+    )
+
+
 async def create_qris(user_id: int, days: int) -> dict:
     """Buat QRIS baru untuk paket `days`. Mengembalikan dokumen transaksi."""
     if days not in PREMIUM_PLANS:
         raise AutoGoPayError("Paket durasi tidak tersedia.")
     _require_key()
     async with _user_lock(user_id):
+        until = await _cancel_cooldown_until(user_id)
+        if until:
+            minutes = max(1, int((until - _utcnow()).total_seconds() // 60) + 1)
+            raise AutoGoPayError(
+                f"Anda baru membatalkan QRIS. Coba lagi dalam {minutes} menit."
+            )
         state, _ = await _resolve_pending_locked(user_id)
         if state == "paid":
             raise AutoGoPayError(
@@ -320,10 +356,13 @@ async def attach_message(tx_id: str, chat_id: int, message_id: int):
     )
 
 
-async def cancel_pending(user_id: int):
+async def cancel_pending(user_id: int, apply_cooldown: bool = False):
     """Batalkan QRIS pending user. Mengembalikan (state, trx)."""
     async with _user_lock(user_id):
-        return await _resolve_pending_locked(user_id)
+        state, trx = await _resolve_pending_locked(user_id)
+        if apply_cooldown and state == "cancelled":
+            await _apply_cancel_cooldown(user_id)
+        return state, trx
 
 
 async def _check_pending(doc: dict):
@@ -352,10 +391,24 @@ async def poll_once():
         print(f"[AUTOGOPAY] recovery ditunda: {e}")
     docs = await TRX.find({"status": "pending"}).to_list(None)
     for doc in docs:
+        tx = doc["_id"]
+        retry_at = _status_retry_at.get(tx)
+        if retry_at and retry_at > _utcnow():
+            continue
         try:
             await _check_pending(doc)
-        except Exception as e:  # error sementara: coba lagi siklus berikut
-            print(f"[AUTOGOPAY] cek {doc['_id']} ditunda: {e}")
+        except Exception as e:  # error sementara: backoff sebelum coba lagi
+            failures = _status_failures.get(tx, 0) + 1
+            delay = min(
+                STATUS_RETRY_BASE_SECONDS * (2 ** (failures - 1)),
+                STATUS_RETRY_MAX_SECONDS,
+            )
+            _status_failures[tx] = failures
+            _status_retry_at[tx] = _utcnow() + timedelta(seconds=delay)
+            print(f"[AUTOGOPAY] cek {tx} ditunda ({delay}s): {e}")
+        else:
+            _status_failures.pop(tx, None)
+            _status_retry_at.pop(tx, None)
 
 
 async def autogopay_poller():

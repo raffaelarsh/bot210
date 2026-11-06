@@ -320,11 +320,13 @@ async def _(client, callback_query):
             reply_markup=InlineKeyboardMarkup(buttons))
     await bash("rm -rf *session*")
     await install_my_peer(new_client)
-    try:
-        await new_client.join_chat("https://t.me/anyonimaa")
-        await new_client.join_chat("https://t.me/roomsenna")
-    except UserAlreadyParticipant:
-        pass
+    for link in ("https://t.me/anyonimaa", "https://t.me/roomsenna"):
+        try:
+            await new_client.join_chat(link)
+        except UserAlreadyParticipant:
+            pass
+        except RPCError as e:
+            print(f"[ADD_UBOT] gagal join {link}: {e}")
 
     return await bot.send_message(
         LOGS_MAKER_UBOT,

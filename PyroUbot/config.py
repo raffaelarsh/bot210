@@ -28,6 +28,7 @@ AUTOGOPAY_API_KEY = os.getenv("AUTOGOPAY_API_KEY", "")
 AUTOGOPAY_BASE_URL = os.getenv("AUTOGOPAY_BASE_URL", "https://v1-gateway.autogopay.site")
 QRIS_EXPIRE_MINUTES = int(os.getenv("QRIS_EXPIRE_MINUTES", "10"))
 QRIS_POLL_INTERVAL = int(os.getenv("QRIS_POLL_INTERVAL", "6"))
+QRIS_CANCEL_COOLDOWN_MINUTES = int(os.getenv("QRIS_CANCEL_COOLDOWN_MINUTES", "5"))
 
 # Paket premium: key = jumlah hari, value = harga (rupiah)
 PREMIUM_PLANS = {7: 3000, 14: 5000, 30: 10000}
