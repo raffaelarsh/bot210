@@ -50,7 +50,7 @@ class MessageNotModified(RPCError):
     pass
 
 
-_stub("pyrogram")
+_stub("pyrogram", __version__="test")
 _stub(
     "pyrogram.types",
     InlineKeyboardButton=InlineKeyboardButton,
@@ -220,7 +220,7 @@ async def remove_ubot(user_id):
 # ── stub modul PyroUbot ───────────────────────────────────────────
 class FakeBot:
     def __init__(self):
-        self.me = SimpleNamespace(id=999, username="fakebot")
+        self.me = SimpleNamespace(id=999, username="fakebot", mention="@fakebot")
         self.reset()
 
     def reset(self):
@@ -278,6 +278,19 @@ _stub(
     TRIAL_BROADCAST_HOURS=6,
 )
 _stub("PyroUbot.core")
+
+
+class _PY:
+    @staticmethod
+    def CALLBACK(name):
+        def deco(fn):
+            return fn
+
+        return deco
+
+
+_stub("PyroUbot.core.helpers", PY=_PY())
+_stub("PyroUbot.modules", loadModule=lambda: [])
 _stub("PyroUbot.core.database", mongodb=FAKE_DB)
 _stub(
     "PyroUbot.core.database.expired",
@@ -307,6 +320,7 @@ format_util = _load("PyroUbot.core.format_util", os.path.join("core", "format_ut
 setattr(sys.modules["PyroUbot.core"], "format_util", format_util)
 autogopay = _load("PyroUbot.core.function.autogopay", os.path.join("core", "function", "autogopay.py"))
 trial = _load("PyroUbot.core.function.trial", os.path.join("core", "function", "trial.py"))
+plugins = _load("PyroUbot.core.function.plugins", os.path.join("core", "function", "plugins.py"))
 
 
 class Gateway:

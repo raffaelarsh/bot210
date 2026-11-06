@@ -18,7 +18,8 @@ async def loadPlugins():
         if module_name:
             HELP_COMMANDS[module_name] = imported_module
     print(f"[🤖 @{bot.me.username} 🤖] [💠 SUKSES ONLINE 💠]")
-    await bot.send_message(OWNER_ID, 
+    try:
+        await bot.send_message(OWNER_ID, 
        f"""                    
 <b>🤖 {bot.me.mention} ʙᴇʀʜᴀsɪʟ ᴅɪᴀᴋᴛɪꜰᴋᴀɴ</b>
 <b>📁 ᴍᴏᴅᴜʟᴇs: {len(HELP_COMMANDS)}</b>
@@ -35,6 +36,8 @@ async def loadPlugins():
             ]
         ),
                           )
+    except Exception as e:
+        print(f"[WARN] gagal kirim notifikasi startup ke OWNER_ID {OWNER_ID}: {e}")
     
 @PY.CALLBACK("0_cls")
 async def _(client, callback_query):
